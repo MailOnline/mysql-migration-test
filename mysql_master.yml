@@ -1,0 +1,5 @@
+- hosts: localhost
+  roles:
+    # - common
+    # - terminal_developer
+    - mysql_master

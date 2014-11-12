@@ -1,3 +1,15 @@
 user:
   email: matthew.forrester@speechmarks.com
   name: Matthew Forrester
+mysql:
+  source:
+    username: root
+    password: Passw0rd
+    host: 10.251.76.69
+    database: Articles
+  root:
+    password: jackwhite
+  application:
+    username: cc
+    password: cc
+    database: Articles
