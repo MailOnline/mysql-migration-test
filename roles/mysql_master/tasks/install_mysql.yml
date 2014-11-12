@@ -1,0 +1,12 @@
+# Package Installation
+- name: "MySQL: Setup MySQL U/P"
+  shell: echo "mysql-server mysql-server/root_password password {{ mysql.root.password }}" | debconf-set-selections ; echo "mysql-server mysql-server/root_password_again password {{ mysql.root.password }}" | debconf-set-selections
+  sudo: yes
+- name: "MySQL: Installation"
+  apt: state=present package={{ item }}
+  with_items:
+    - mysql-server
+    - mysql-client
+    - python-mysqldb
+  sudo: yes
+
