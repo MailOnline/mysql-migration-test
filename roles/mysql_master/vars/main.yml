@@ -1,0 +1,6 @@
+mysql_source:
+  username: "{{ mysql_real_data_source.username }}"
+  password: "{{ mysql_real_data_source.password }}"
+  database: "{{ mysql_real_data_source.database }}"
+  host: "{{ mysql_real_data_source.host }}"
+

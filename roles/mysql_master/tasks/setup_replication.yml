@@ -4,4 +4,4 @@
     - { option: log_bin, value: /var/log/mysql/mysql-bin.log }
     - { option: bind-address, value: 0.0.0.0 }
     - { option: server-id, value: master }
-- mysql_user: login_user=root login_password={{ mysql.root.password }} priv="*.*:REPLICATION SLAVE" host={{ mysql.slave.ip_address }} name={{ mysql.slave.username }} password={{ mysql.slave.password }} state=present
+- mysql_user: login_user=root login_password={{ mysql_root_password }} priv="*.*:REPLICATION SLAVE" host={{ mysql_slave.host }} name={{ mysql_slave.username }} password={{ mysql_slave.password }} state=present

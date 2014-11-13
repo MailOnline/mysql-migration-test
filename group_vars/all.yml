@@ -1,20 +1,18 @@
 user:
   email: matthew.forrester@speechmarks.com
   name: Matthew Forrester
-mysql:
-  source:
-    username: root
-    password: Passw0rd
-    host: 10.251.76.69
-    database: Articles
-  root:
-    password: jackwhite
-  application:
-    username: cc
-    password: cc
-    database: Articles
-  slave:
-    username: ccslave
-    password: ccslave
-    database: Articles
-    ip_address: 192.168.50.200
+mysql_real_data_source:
+  username: root
+  password: Passw0rd
+  host: 10.251.76.69
+  database: Articles
+mysql_application:
+  username: cc
+  password: cc
+  database: Articles
+mysql_slave:
+  username: ccslave
+  password: ccslave
+  database: Articles
+  host: 192.168.50.200
+mysql_root_password: jackwhite
