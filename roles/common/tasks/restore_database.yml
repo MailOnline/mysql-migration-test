@@ -3,9 +3,11 @@
   sudo: yes
 - shell: echo "show databases;" | mysql -u{{ mysql_application.username }} -p{{ mysql_application.password }} | grep {{ mysql_application.database}} | wc -l
   register: article_db_count
+- mysql_user: login_user=root login_password={{ mysql_root_password }} priv={{ mysql_application.database }}.*:ALL name={{ mysql_application.username }} password={{ mysql_application.password }} host={{ item }} state=present
+  with_items:
+    - localhost
+    - '%'
 - mysql_db: login_user=root login_password={{ mysql_root_password }} name={{ mysql_application.database }} state=present
-  when: article_db_count.stdout == "0"
-- mysql_user: login_user=root login_password={{ mysql_root_password }} priv={{ mysql_application.database }}.*:ALL name={{ mysql_application.username }} password={{ mysql_application.password }} state=present
   when: article_db_count.stdout == "0"
 - name: "MySQL: Restore Database from Integration"
   shell: "mysqldump -u{{ mysql_source.username }} -p{{ mysql_source.password }} -h{{ mysql_source.host }} {{ mysql_source.database }} | mysql -u{{ mysql_application.username }} -p{{ mysql_application.password }} {{ mysql_application.database }}"
