@@ -1,0 +1,9 @@
+- ini_file: dest=/etc/mysql/my.cnf section=mysqld option={{ item.option }} value={{ item.value }}
+  sudo: yes
+  with_items:
+    - { option: log_bin, value: /var/log/mysql/mysql-bin.log }
+    - { option: bind-address, value: 0.0.0.0 }
+- ini_file: dest=/etc/mysql/my.cnf section=mysqld option=server-id value={{ mysql_server_id }}
+  sudo: yes
+- mysql_user: login_user=root login_password={{ mysql_root_password }} priv="*.*:REPLICATION SLAVE" host={{ mysql_slave.host }} name={{ mysql_slave.master_username }} password={{ mysql_slave.master_password }} state=present
+  when: mysql_server_id == 1

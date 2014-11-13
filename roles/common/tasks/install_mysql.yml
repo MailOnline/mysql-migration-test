@@ -1,5 +1,7 @@
 # Package Installation
 
+- apt_key: keyserver=keys.gnupg.net id=1C4CBDCDCD2EFD2A state=present
+  sudo: yes
 - apt_repository: repo='deb http://repo.percona.com/apt trusty main' state=present
   sudo: yes
 - name: "MySQL: Setup MySQL U/P"
@@ -10,6 +12,7 @@
   with_items:
     - percona-server-server-5.5
     - percona-server-client-5.5
+    - percona-xtrabackup
     - python-mysqldb
   sudo: yes
 

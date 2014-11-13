@@ -1,0 +1,6 @@
+mysql_source:
+  username: "{{ mysql_application.username }}"
+  password: "{{ mysql_application.password }}"
+  database: "{{ mysql_application.database }}"
+  host: "{{ mysql_master.host }}"
+mysql_server_id: 2

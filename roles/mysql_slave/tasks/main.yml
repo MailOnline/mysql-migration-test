@@ -1,0 +1,5 @@
+- include: ./install_mysql.yml
+# - include: ./restore_database.yml
+- include: ./setup_replication.yml
+- include: ./start_replication_slave.yml
+

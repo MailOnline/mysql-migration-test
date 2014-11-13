@@ -1,0 +1,1 @@
+- include: ../../common/tasks/restore_database.yml
