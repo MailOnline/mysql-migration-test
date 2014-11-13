@@ -1,11 +1,1 @@
-# Restore Database
-- shell: echo "show databases;" | mysql -u{{ mysql.application.username }} -p{{ mysql.application.password }} | grep {{ mysql.application.database}} | wc -l
-  register: article_db_count
-- mysql_db: login_user=root login_password={{ mysql.root.password }} name={{ mysql.application.database }} state=present
-  when: article_db_count.stdout == "0"
-- mysql_user: login_user=root login_password={{ mysql.root.password }} priv={{ mysql.application.database }}.*:ALL name={{ mysql.application.username }} password={{ mysql.application.password }} state=present
-  when: article_db_count.stdout == "0"
-- name: "MySQL: Restore Database from Integration"
-  shell: mysqldump -u{{ mysql.source.username }} -p{{ mysql.source.password }} -h{{ mysql.source.host }} {{ mysql.source.database }} | mysql -u{{ mysql.application.username }} -p{{ mysql.application.password }} {{ mysql.application.database }}
-  when: article_db_count.stdout == "0"
-
+- include: ../../common/tasks/restore_database.yml
