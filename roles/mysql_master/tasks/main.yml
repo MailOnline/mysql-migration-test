@@ -1,5 +1,6 @@
 - include: ./install_mysql.yml
 - include: ./restore_database.yml
 - include: ./setup_replication.yml
+
 - name: "Make sure that the slave can get access through SSH"
-  shell: cat ~/.ssh/id_?sa.pub > ~/.ssh/authorized_keys
+  shell: cat ~/.ssh/id_?sa.pub >> ~/.ssh/authorized_keys
