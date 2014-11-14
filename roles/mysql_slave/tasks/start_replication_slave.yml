@@ -1,10 +1,14 @@
+- name: "Import SSH Key from master"
+  shell: ssh-keyscan {{ mysql_master.host }} >> ~/.ssh/known_hosts
 - service: name=mysql state=stopped
   sudo: yes
 - name: "MySQL: Restore Database from Master (1)"
   shell: "ssh {{ mysql_master.ssh_username}}@{{ mysql_master.host }} sudo \"{{ item }}\""
   with_items:
+    - "ansible localhost -m file -a 'dest=/tmp/backup state=absent'"
     - "ansible localhost -m file -a 'dest=/tmp/backup state=directory'"
     - "innobackupex --user=root --password={{ mysql_root_password }} /tmp/backup"
+    - "ansible localhost -m service -a 'name=mysql state=started'"
 - name: "MySQL: Make Target Directory"
   file: name="/tmp/master_data" state=absent
 - name: "MySQL: Make Target Directory"
@@ -22,8 +26,11 @@
   shell: cd /tmp/master_data/* ; cat xtrabackup_binlog_info  | sed 's/\t.*//'
   register: master_binlog
 - name: "Read Master Position"
-  shell: cd /tmp/master_data/* ; cat xtrabackup_binlog_info  | sed 's/\S*\t*//'
+  shell: cd /tmp/master_data/* ; cat xtrabackup_binlog_info  | sed 's/\S*\t*//' | sed 's/\t//'
   register: master_pos
+- name: "MySQL: Allow Debian access to be"
+  shell: "ssh {{ mysql_master.ssh_username}}@{{ mysql_master.host }} sudo cat /etc/mysql/debian.cnf > /tmp/debian.cnf ; sudo cp /tmp/debian.cnf /etc/mysql/debian.cnf ; rm /tmp/debian.cnf"
+- service: name=mysql state=started
+  sudo: yes
 - name: "Set Master Info"
-  debug: msg="CHANGE MASTER TO MASTER_HOST=\'{{ mysql_master.host }}\', MASTER_USER=\'{{ mysql_slave.master_username }}, MASTER_PASSWORD=\'{{ mysql_slave.master_password }}, MASTER_LOG_FILE=\'{{ master_binlog.stdout }}\', MASTER_LOG_POS={{ master_pos.stdout }}; SLAVE START"
-
+  shell: echo "CHANGE MASTER TO MASTER_HOST='{{ mysql_master.host }}', MASTER_USER='{{ mysql_slave.master_username }}', MASTER_PASSWORD='{{ mysql_slave.master_password }}', MASTER_LOG_FILE='{{ master_binlog.stdout }}', MASTER_LOG_POS={{ master_pos.stdout }}; SLAVE START" | mysql -uroot -p{{ mysql_root_password }}

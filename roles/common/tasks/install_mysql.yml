@@ -1,14 +1,17 @@
 # Package Installation
 
-- apt_key: keyserver=keys.gnupg.net id=1C4CBDCDCD2EFD2A state=present
-  sudo: yes
-- apt_repository: repo='deb http://repo.percona.com/apt trusty main' state=present
+# In an ideal world, we'd not have commented out the apt_key line, validated certificates when adding
+# the apt-repository and not had to force installation, unfortunately I think we have proxy issues.
+
+# - apt_key: keyserver=keys.gnupg.net:80 id=1C4CBDCDCD2EFD2A state=present
+#   sudo: yes
+- apt_repository: repo='deb http://repo.percona.com/apt trusty main' state=present validate_certs=no
   sudo: yes
 - name: "MySQL: Setup MySQL U/P"
   shell: echo "percona-server-server-5.5 percona-server-server/root_password password {{ mysql_root_password }}" | debconf-set-selections ; echo "percona-server-server-5.5 percona-server-server/root_password_again password {{ mysql_root_password }}" | debconf-set-selections
   sudo: yes
 - name: "MySQL: Installation"
-  apt: state=present package={{ item }}
+  apt: state=present package={{ item }} force=yes
   with_items:
     - percona-server-server-5.5
     - percona-server-client-5.5
