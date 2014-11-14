@@ -1,5 +1,5 @@
 - hosts: localhost
   roles:
-    - common
-    - terminal_developer
+    # - common
+    # - terminal_developer
     - mysql_slave
