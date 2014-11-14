@@ -11,5 +11,4 @@
   when: article_db_count.stdout == "0"
 - name: "MySQL: Restore Database from Integration"
   shell: "mysqldump -u{{ mysql_source.username }} -p{{ mysql_source.password }} -h{{ mysql_source.host }} {{ mysql_source.database }} | mysql -u{{ mysql_application.username }} -p{{ mysql_application.password }} {{ mysql_application.database }}"
-  when: ( article_db_count.stdout == "0" ) and ( mysql_server_id == "1" )
-
+  when: ( article_db_count.stdout == "0" ) and ( mysql_server_id == 1 )
